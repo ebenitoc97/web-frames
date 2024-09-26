@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Assistant Calendar</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header {
+            background-color: #333;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .content {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 20%;
+            background-color: #eaeaea;
+            padding: 20px;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+        }
+
+        .sidebar li {
+            padding: 10px 0;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .main {
+            width: 80%;
+            padding: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+
+        .buttons button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #555;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-gap: 10px;
+            text-align: center;
+        }
+
+        .calendar div {
+            padding: 20px;
+            background-color: #f3eaff;
+            border-radius: 5px;
+            color: #333;
+        }
+
+        .highlight {
+            background-color: #9a73e8;
+            color: white;
+        }
+
+        .view-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .view-buttons button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .calendar-section.active {
+            display: block;
+        }
+
+        .calendar-section {
+            display: none;
+        }
+
+        .form-section input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-section label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-buttons {
+            text-align: right;
+        }
+
+        .form-buttons button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .list-section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .list-section.active {
+            display: block;
+        }
+
+        .list-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .list-section li {
+            padding: 10px;
+            background-color: #eaeaea;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            MEDICAL ASSISTANT
+        </div>
+        <div class="content">
+            <div class="sidebar">
+                <ul>
+                    <li id="turnos-btn">Turnos</li>
+                    <li id="seminarios-btn">Seminarios</li>
+                    <li id="pruebas-btn">Pruebas</li>
+                    <li id="alarmas-btn">Alarmas</li>
+                </ul>
+            </div>
+            <div class="main">
+                <div class="buttons">
+                    <button id="add-seminar-btn">Agregar Seminario</button>
+                    <button id="add-test-btn">Agregar Prueba</button>
+                    <button id="add-shift-btn">Agregar Turno</button>
+                </div>
+
+                <!-- Calendar Section -->
+                <div id="calendar-section" class="calendar-section active">
+                    <div class="calendar">
+                        <!-- Calendar dates -->
+                        <div>2</div>
+                        <div>3</div>
+                        <div>4</div>
+                        <div>5</div>
+                        <div>6</div>
+                        <div>7</div>
+                        <div>8</div>
+                        <div>9</div>
+                        <div>10</div>
+                        <div>11</div>
+                        <div class="highlight">12</div>
+                        <div class="highlight">13</div>
+                        <div>14</div>
+                        <div>15</div>
+                        <div>16</div>
+                        <div>17</div>
+                        <div>18</div>
+                        <div>19</div>
+                        <div>20</div>
+                        <div>21</div>
+                        <div>22</div>
+                        <div>23</div>
+                        <div>24</div>
+                        <div>25</div>
+                        <div>26</div>
+                        <div>27</div>
+                        <div>28</div>
+                        <div>29</div>
+                        <div>30</div>
+                        <div>31</div>
+                    </div>
+                </div>
+
+                <!-- List Section for Turnos -->
+                <div id="list-section-turnos" class="list-section">
+                    <h3>Turnos</h3>
+                    <ul id="turnos-list"></ul>
+                    <button id="back-to-main-turnos">Volver</button>
+                </div>
+
+                <!-- List Section for Seminarios -->
+                <div id="list-section-seminarios" class="list-section">
+                    <h3>Seminarios</h3>
+                    <ul id="seminarios-list"></ul>
+                    <button id="back-to-main-seminarios">Volver</button>
+                </div>
+
+                <!-- List Section for Pruebas -->
+                <div id="list-section-pruebas" class="list-section">
+                    <h3>Pruebas</h3>
+                    <ul id="pruebas-list"></ul>
+                    <button id="back-to-main-pruebas">Volver</button>
+                </div>
+
+                <!-- Form Section for Agregar Seminario -->
+                <div id="form-section-seminar" class="form-section">
+                    <label for="start-time-seminar">Hora Inicio</label>
+                    <input type="text" id="start-time-seminar" name="start-time" placeholder="Hora Inicio">
+                    
+                    <label for="end-time-seminar">Hora Fin</label>
+                    <input type="text" id="end-time-seminar" name="end-time" placeholder="Hora Fin">
+                    
+                    <label for="name-seminar">Nombre</label>
+                    <input type="text" id="name-seminar" name="name" placeholder="Nombre">
+                    
+                    <label for="location-seminar">Lugar</label>
+                    <input type="text" id="location-seminar" name="location" placeholder="Lugar">
+                    
+                    <label for="preparation-days-seminar">Días de Preparación</label>
+                    <input type="text" id="preparation-days-seminar" name="preparation-days" placeholder="Días de Preparación">
+                    
+                    <label for="topic">Tema</label>
+                    <input type="text" id="topic" name="topic" placeholder="Tema">
+                    
+                    <div class="form-buttons">
+                        <button id="save-seminar-btn">Guardar Seminario</button>
+                    </div>
+                </div>
+
+                <!-- Form Section for Agregar Prueba -->
+                <div id="form-section-test" class="form-section">
+                    <label for="start-time-test">Hora Inicio</label>
+                    <input type="text" id="start-time-test" name="start-time" placeholder="Hora Inicio">
+                    
+                    <label for="end-time-test">Hora Fin</label>
+                    <input type="text" id="end-time-test" name="end-time" placeholder="Hora Fin">
+                    
+                    <label for="name-test">Nombre</label>
+                    <input type="text" id="name-test" name="name" placeholder="Nombre">
+                    
+                    <label for="result-test">Resultados</label>
+                    <input type="text" id="result-test" name="result" placeholder="Resultados">
+                    
+                    <div class="form-buttons">
+                        <button id="save-test-btn">Guardar Prueba</button>
+                    </div>
+                </div>
+
+                <!-- Form Section for Agregar Turno -->
+                <div id="form-section-shift" class="form-section">
+                    <label for="start-time-shift">Hora Inicio</label>
+                    <input type="text" id="start-time-shift" name="start-time" placeholder="Hora Inicio">
+                    
+                    <label for="end-time-shift">Hora Fin</label>
+                    <input type="text" id="end-time-shift" name="end-time" placeholder="Hora Fin">
+                    
+                    <label for="name-shift">Nombre</label>
+                    <input type="text" id="name-shift" name="name" placeholder="Nombre">
+                    
+                    <div class="form-buttons">
+                        <button id="save-shift-btn">Guardar Turno</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Elements
+        const turnosBtn = document.getElementById('turnos-btn');
+        const seminariosBtn = document.getElementById('seminarios-btn');
+        const pruebasBtn = document.getElementById('pruebas-btn');
+        const alarmasBtn = document.getElementById('alarmas-btn');
+        
+        const listSectionTurnos = document.getElementById('list-section-turnos');
+        const listSectionSeminarios = document.getElementById('list-section-seminarios');
+        const listSectionPruebas = document.getElementById('list-section-pruebas');
+        
+        const formSectionSeminar = document.getElementById('form-section-seminar');
+        const formSectionTest = document.getElementById('form-section-test');
+        const formSectionShift = document.getElementById('form-section-shift');
+
+        const calendarSection = document.getElementById('calendar-section');
+        
+        const turnosList = document.getElementById('turnos-list');
+        const seminariosList = document.getElementById('seminarios-list');
+        const pruebasList = document.getElementById('pruebas-list');
+
+        // Add event listeners
+        turnosBtn.addEventListener('click', () => {
+            calendarSection.style.display = 'none';
+            listSectionTurnos.classList.add('active');
+            listSectionSeminarios.classList.remove('active');
+            listSectionPruebas.classList.remove('active');
+            formSectionSeminar.classList.remove('active');
+            formSectionTest.classList.remove('active');
+            formSectionShift.classList.remove('active');
+        });
+
+        seminariosBtn.addEventListener('click', () => {
+            calendarSection.style.display = 'none';
+            listSectionTurnos.classList.remove('active');
+            listSectionSeminarios.classList.add('active');
+            listSectionPruebas.classList.remove('active');
+            formSectionSeminar.classList.remove('active');
+            formSectionTest.classList.remove('active');
+            formSectionShift.classList.remove('active');
+        });
+
+        pruebasBtn.addEventListener('click', () => {
+            calendarSection.style.display = 'none';
+            listSectionTurnos.classList.remove('active');
+            listSectionSeminarios.classList.remove('active');
+            listSectionPruebas.classList.add('active');
+            formSectionSeminar.classList.remove('active');
+            formSectionTest.classList.remove('active');
+            formSectionShift.classList.remove('active');
+        });
+
+        alarmasBtn.addEventListener('click', () => {
+            alert("Funcionalidad de Alarmas no implementada aún.");
+        });
+
+        document.getElementById('back-to-main-turnos').addEventListener('click', () => {
+            calendarSection.style.display = 'block';
+            listSectionTurnos.classList.remove('active');
+        });
+
+        document.getElementById('back-to-main-seminarios').addEventListener('click', () => {
+            calendarSection.style.display = 'block';
+            listSectionSeminarios.classList.remove('active');
+        });
+
+        document.getElementById('back-to-main-pruebas').addEventListener('click', () => {
+            calendarSection.style.display = 'block';
+            listSectionPruebas.classList.remove('active');
+        });
+
+        document.getElementById('add-seminar-btn').addEventListener('click', () => {
+            formSectionSeminar.classList.add('active');
+            formSectionTest.classList.remove('active');
+            formSectionShift.classList.remove('active');
+            listSectionTurnos.classList.remove('active');
+            listSectionSeminarios.classList.remove('active');
+            listSectionPruebas.classList.remove('active');
+        });
+
+        document.getElementById('add-test-btn').addEventListener('click', () => {
+            formSectionTest.classList.add('active');
+            formSectionSeminar.classList.remove('active');
+            formSectionShift.classList.remove('active');
+            listSectionTurnos.classList.remove('active');
+            listSectionSeminarios.classList.remove('active');
+            listSectionPruebas.classList.remove('active');
+        });
+
+        document.getElementById('add-shift-btn').addEventListener('click', () => {
+            formSectionShift.classList.add('active');
+            formSectionSeminar.classList.remove('active');
+            formSectionTest.classList.remove('active');
+            listSectionTurnos.classList.remove('active');
+            listSectionSeminarios.classList.remove('active');
+            listSectionPruebas.classList.remove('active');
+        });
+
+        document.getElementById('save-seminar-btn').addEventListener('click', () => {
+            const startTime = document.getElementById('start-time-seminar').value;
+            const endTime = document.getElementById('end-time-seminar').value;
+            const name = document.getElementById('name-seminar').value;
+            const location = document.getElementById('location-seminar').value;
+            const preparationDays = document.getElementById('preparation-days-seminar').value;
+            const topic = document.getElementById('topic').value;
+
+            const seminarItem = document.createElement('li');
+            seminarItem.textContent = `${name} - ${startTime} to ${endTime} - ${location} - ${preparationDays} days - Topic: ${topic}`;
+            seminariosList.appendChild(seminarItem);
+
+            alert("Seminario guardado!");
+
+            // Clear form
+            document.getElementById('start-time-seminar').value = '';
+            document.getElementById('end-time-seminar').value = '';
+            document.getElementById('name-seminar').value = '';
+            document.getElementById('location-seminar').value = '';
+            document.getElementById('preparation-days-seminar').value = '';
+            document.getElementById('topic').value = '';
+            formSectionSeminar.classList.remove('active');
+        });
+
+        document.getElementById('save-test-btn').addEventListener('click', () => {
+            const startTime = document.getElementById('start-time-test').value;
+            const endTime = document.getElementById('end-time-test').value;
+            const name = document.getElementById('name-test').value;
+            const result = document.getElementById('result-test').value;
+
+            const testItem = document.createElement('li');
+            testItem.textContent = `${name} - ${startTime} to ${endTime} - Results: ${result}`;
+            pruebasList.appendChild(testItem);
+
+            alert("Prueba guardada!");
+
+            // Clear form
+            document.getElementById('start-time-test').value = '';
+            document.getElementById('end-time-test').value = '';
+            document.getElementById('name-test').value = '';
+            document.getElementById('result-test').value = '';
+            formSectionTest.classList.remove('active');
+        });
+
+        document.getElementById('save-shift-btn').addEventListener('click', () => {
+            const startTime = document.getElementById('start-time-shift').value;
+            const endTime = document.getElementById('end-time-shift').value;
+            const name = document.getElementById('name-shift').value;
+
+            const shiftItem = document.createElement('li');
+            shiftItem.textContent = `${name} - ${startTime} to ${endTime}`;
+            turnosList.appendChild(shiftItem);
+
+            alert("Turno guardado!");
+
+            // Clear form
+            document.getElementById('start-time-shift').value = '';
+            document.getElementById('end-time-shift').value = '';
+            document.getElementById('name-shift').value = '';
+            formSectionShift.classList.remove('active');
+        });
+    </script>
+</body>
+</html>
